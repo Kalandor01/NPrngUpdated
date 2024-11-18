@@ -1,12 +1,12 @@
+using NPrng.Generators;
 using System;
 using System.IO;
-using NPrng.Generators;
 
 namespace NPrng.Serializers
 {
     public sealed class Xoshiro256StarStarSerializer : AbstractPseudoRandomGeneratorSerializer<Xoshiro256StarStar>
     {
-        private const int BufferSize = 4 * sizeof(UInt64);
+        private const int BufferSize = 4 * sizeof(ulong);
 
         /// <inheritdoc/>
         public override int GetExpectedBufferSize(Xoshiro256StarStar generator) => BufferSize;
@@ -14,14 +14,10 @@ namespace NPrng.Serializers
         /// <inheritdoc/>
         public override Xoshiro256StarStar ReadFromBuffer(ArraySegment<byte> buffer, out int read)
         {
-            UInt64 s0;
-            buffer = SerializationHelpers.ReadFromBuffer(buffer, out s0);
-            UInt64 s1;
-            buffer = SerializationHelpers.ReadFromBuffer(buffer, out s1);
-            UInt64 s2;
-            buffer = SerializationHelpers.ReadFromBuffer(buffer, out s2);
-            UInt64 s3;
-            buffer = SerializationHelpers.ReadFromBuffer(buffer, out s3);
+            buffer = SerializationHelpers.ReadFromBuffer(buffer, out var s0);
+            buffer = SerializationHelpers.ReadFromBuffer(buffer, out var s1);
+            buffer = SerializationHelpers.ReadFromBuffer(buffer, out var s2);
+            buffer = SerializationHelpers.ReadFromBuffer(buffer, out var s3);
             read = BufferSize;
             return new Xoshiro256StarStar(s0, s1, s2, s3);
         }
@@ -29,14 +25,10 @@ namespace NPrng.Serializers
         /// <inheritdoc/>
         public override Xoshiro256StarStar ReadFromStream(Stream source)
         {
-            UInt64 s0;
-            SerializationHelpers.ReadFromStream(source, out s0);
-            UInt64 s1;
-            SerializationHelpers.ReadFromStream(source, out s1);
-            UInt64 s2;
-            SerializationHelpers.ReadFromStream(source, out s2);
-            UInt64 s3;
-            SerializationHelpers.ReadFromStream(source, out s3);
+            SerializationHelpers.ReadFromStream(source, out var s0);
+            SerializationHelpers.ReadFromStream(source, out var s1);
+            SerializationHelpers.ReadFromStream(source, out var s2);
+            SerializationHelpers.ReadFromStream(source, out var s3);
             return new Xoshiro256StarStar(s0, s1, s2, s3);
         }
 

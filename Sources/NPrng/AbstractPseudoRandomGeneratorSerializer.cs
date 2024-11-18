@@ -41,10 +41,10 @@ namespace NPrng
         }
 
         IPseudoRandomGenerator IPseudoRandomGeneratorSerializer.ReadFromStream(Stream source)
-            => this.ReadFromStream(source);
+            => ReadFromStream(source);
 
         IPseudoRandomGenerator IPseudoRandomGeneratorSerializer.ReadFromBuffer(ArraySegment<byte> buffer, out int read)
-            => this.ReadFromBuffer(buffer, out read);
+            => ReadFromBuffer(buffer, out read);
 
         int IPseudoRandomGeneratorSerializer.GetExpectedBufferSize(IPseudoRandomGenerator generator)
         {

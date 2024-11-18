@@ -2,11 +2,19 @@
 
   <PropertyGroup>
     <OutputType>Library</OutputType>
-    <Version>0.1.0.0</Version>
-    <TargetFramework>netstandard1.3</TargetFramework>
+    <Version>1.0.0.3</Version>
+    <TargetFramework>netstandard2.1</TargetFramework>
     <Nullable>enable</Nullable>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <LangVersion>9.0</LangVersion>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Authors>Rafał Szefler</Authors>
+    <Description>The project contains several implementations of popular pseudo random number generator algorithms. Additionally it contains serializers to save and restore state of every generator in the library.
+Made by Rafał Szefler.
+Source code avalible at https://github.com/RafalSzefler/NPrng</Description>
+    <PackageProjectUrl>https://github.com/RafalSzefler/NPrng</PackageProjectUrl>
+    <Copyright>MIT</Copyright>
+    <RepositoryUrl>https://github.com/RafalSzefler/NPrng.git</RepositoryUrl>
   </PropertyGroup>
 
 </Project>

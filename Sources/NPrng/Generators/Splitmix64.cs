@@ -1,18 +1,16 @@
-using System;
-
 namespace NPrng.Generators
 {
     public sealed class SplitMix64 : AbstractPseudoRandomGenerator
     {
-        internal UInt64 CurrentState { get; private set; }
+        internal ulong CurrentState { get; private set; }
 
-        public SplitMix64(UInt64 currentState)
+        public SplitMix64(ulong currentState)
         {
             CurrentState = currentState;
         }
 
         /// <inheritdoc/>
-        public override Int64 Generate()
+        public override long Generate()
         {
             unchecked
             {
@@ -20,8 +18,8 @@ namespace NPrng.Generators
                 var result = CurrentState;
                 result = (result ^ (result >> 30)) * 0xBF58476D1CE4E5B9;
                 result = (result ^ (result >> 27)) * 0x94D049BB133111EB;
-                result = result ^ (result >> 31);
-                return (Int64)result;
+                result ^= result >> 31;
+                return (long)result;
             }
         }
     }

@@ -6,52 +6,53 @@ namespace NPrng.Generators
 {
     public sealed class SplittableRandom : AbstractPseudoRandomGenerator
     {
-        private static Int64 DefaultGen = InitialSeed();
-        private const UInt64 GOLDEN_GAMMA = 0x9e3779b97f4a7c15L;
+        private static long DefaultGen = InitialSeed();
+        private const ulong GOLDEN_GAMMA = 0x9e3779b97f4a7c15L;
 
-        private static UInt64 GetAndAdd(UInt64 value)
+        private static ulong GetAndAdd(ulong value)
         {
             while (true)
             {
                 var defaultGen = Volatile.Read(ref DefaultGen);
-                var newValue = unchecked(defaultGen + (Int64)value);
+                var newValue = unchecked(defaultGen + (long)value);
                 if (Interlocked.CompareExchange(ref DefaultGen, newValue, defaultGen) == defaultGen)
                 {
-                    return (UInt64)newValue;
+                    return (ulong)newValue;
                 }
             }
         }
 
-        private static Int64 InitialSeed() => DateTime.UtcNow.ToBinary();
-        internal UInt64 Seed { get; private set; }
-        internal UInt64 Gamma { get; }
+        private static long InitialSeed() => DateTime.UtcNow.ToBinary();
+        internal ulong Seed { get; private set; }
+        internal ulong Gamma { get; }
 
-        internal SplittableRandom(UInt64 seed, UInt64 gamma)
+        internal SplittableRandom(ulong seed, ulong gamma)
         {
             Seed = seed;
             Gamma = gamma;
         }
 
-        public SplittableRandom(UInt64 seed)
+        public SplittableRandom(ulong seed)
             : this(seed, GOLDEN_GAMMA)
         { }
 
         public SplittableRandom()
         {
             var s = GetAndAdd(unchecked(2 * GOLDEN_GAMMA));
-            this.Seed = mix64(s);
-            this.Gamma = mixGamma(s + GOLDEN_GAMMA);
+            Seed = mix64(s);
+            Gamma = mixGamma(s + GOLDEN_GAMMA);
         }
 
         /// <inheritdoc/>
-        public override Int64 Generate() => (Int64)mix64(nextSeed());
+        public override long Generate() => (long)mix64(nextSeed());
 
-        public SplittableRandom Split() => new SplittableRandom(
+        public SplittableRandom Split() => new(
             mix64(nextSeed()),
-            mixGamma(nextSeed()));
+            mixGamma(nextSeed())
+        );
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static UInt64 mix64(UInt64 z)
+        private static ulong mix64(ulong z)
         {
             unchecked
             {
@@ -62,7 +63,7 @@ namespace NPrng.Generators
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private UInt64 nextSeed()
+        private ulong nextSeed()
         {
             unchecked
             {
@@ -71,7 +72,7 @@ namespace NPrng.Generators
             }
         }
 
-        private static UInt64 mixGamma(UInt64 z)
+        private static ulong mixGamma(ulong z)
         {
             unchecked
             {
@@ -82,7 +83,7 @@ namespace NPrng.Generators
             return z;
         }
 
-        private static UInt64 mix64variant13(UInt64 z)
+        private static ulong mix64variant13(ulong z)
         {
             unchecked
             {

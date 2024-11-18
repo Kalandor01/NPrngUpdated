@@ -8,8 +8,7 @@ namespace NPrng.Tests
 {
     public sealed class ChaCha20GeneratorSerializerTests
     {
-        private readonly ChaCha20GeneratorSerializer Serializer
-            = new ChaCha20GeneratorSerializer();
+        private readonly ChaCha20GeneratorSerializer Serializer = new();
 
         [Theory]
         [InlineData(1, "YXB4ZTMgZG55Yi0yayBldAAAAAEAAAAAAAAAAQAAAAAAAAABAAAAAAAAAAEAAAAAAAAAAAsWe+ZvLjE3ThKWRA==", -8183708576023727317, -6446727672260194149)]
@@ -74,7 +73,7 @@ namespace NPrng.Tests
             var serialized = Serializer.WriteToString(generator);
             Assert.NotNull(serialized);
             var newGenerator = Serializer.ReadFromString(serialized);
-            Assert.False(object.ReferenceEquals(generator, newGenerator));
+            Assert.False(ReferenceEquals(generator, newGenerator));
 
             for (var i = 0; i < 100; i++)
             {

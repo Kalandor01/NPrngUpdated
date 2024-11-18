@@ -6,21 +6,21 @@ namespace NPrng
     public abstract class AbstractPseudoRandomGenerator : IPseudoRandomGenerator
     {
         /// <inheritdoc/>
-        public abstract Int64 Generate();
+        public abstract long Generate();
 
         /// <inheritdoc/>
         public double GenerateDouble()
         {
-            const Int64 absMask = ~(unchecked((Int64)(1UL << 63)) >> 2);
+            const long absMask = ~(unchecked((long)(1UL << 63)) >> 2);
 
             // We replace first three bits with 0 via absMask, and then divide
             // by absMask+1 to ensure [0,1) interval.
             var generated = Generate() & absMask;
-            return (double)generated / (double)(absMask+1);
+            return (double)generated / (absMask + 1);
         }
 
         /// <inheritdoc/>
-        public virtual Int64 GenerateInRange(Int64 lower, Int64 upper)
+        public virtual long GenerateInRange(long lower, long upper)
         {
             if (lower > upper)
             {
@@ -35,7 +35,7 @@ namespace NPrng
         }
 
         /// <inheritdoc/>
-        public virtual Int64 GenerateLessOrEqualTo(Int64 range)
+        public virtual long GenerateLessOrEqualTo(long range)
         {
             if (range < 0)
             {
@@ -50,24 +50,24 @@ namespace NPrng
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private Int64 InternalGenerateInRange(Int64 range)
+        private long InternalGenerateInRange(long range)
         {
-            var uRange = (UInt64)range;
+            var uRange = (ulong)range;
             var bitCount = NumericHelpers.CountBits(uRange);
-            var mask = (UInt64)((1 << bitCount) - 1);
+            var mask = (ulong)((1 << bitCount) - 1);
 
-            UInt64 result;
+            ulong result;
             do
             {
-                result = (UInt64)Generate() & mask;
+                result = (ulong)Generate() & mask;
             }
             while (result > uRange);
 
-            return (Int64)result;
+            return (long)result;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static Int64 FastAbs(Int64 value)
+        private static long FastAbs(long value)
         {
             var shifted = value >> 63;
             return (value + shifted) ^ shifted;

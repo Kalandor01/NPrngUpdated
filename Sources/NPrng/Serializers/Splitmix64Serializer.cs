@@ -1,12 +1,12 @@
+using NPrng.Generators;
 using System;
 using System.IO;
-using NPrng.Generators;
 
 namespace NPrng.Serializers
 {
     public sealed class SplitMix64Serializer : AbstractPseudoRandomGeneratorSerializer<SplitMix64>
     {
-        private const int BufferSize = sizeof(UInt64);
+        private const int BufferSize = sizeof(ulong);
 
         /// <inheritdoc/>
         public override int GetExpectedBufferSize(SplitMix64 generator) => BufferSize;
@@ -14,8 +14,7 @@ namespace NPrng.Serializers
         /// <inheritdoc/>
         public override SplitMix64 ReadFromBuffer(ArraySegment<byte> buffer, out int read)
         {
-            UInt64 state;
-            SerializationHelpers.ReadFromBuffer(buffer, out state);
+            SerializationHelpers.ReadFromBuffer(buffer, out var state);
             read = BufferSize;
             return new SplitMix64(state);
         }
@@ -23,8 +22,7 @@ namespace NPrng.Serializers
         /// <inheritdoc/>
         public override SplitMix64 ReadFromStream(Stream source)
         {
-            UInt64 state;
-            SerializationHelpers.ReadFromStream(source, out state);
+            SerializationHelpers.ReadFromStream(source, out var state);
             return new SplitMix64(state);
         }
 

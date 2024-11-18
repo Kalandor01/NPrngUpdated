@@ -1,12 +1,12 @@
+using NPrng.Generators;
 using System;
 using System.IO;
-using NPrng.Generators;
 
 namespace NPrng.Serializers
 {
     public sealed class SplittableRandomSerializer : AbstractPseudoRandomGeneratorSerializer<SplittableRandom>
     {
-        private const int BufferSize = 2 * sizeof(UInt64);
+        private const int BufferSize = 2 * sizeof(ulong);
 
         /// <inheritdoc/>
         public override int GetExpectedBufferSize(SplittableRandom generator) => BufferSize;
@@ -14,10 +14,8 @@ namespace NPrng.Serializers
         /// <inheritdoc/>
         public override SplittableRandom ReadFromBuffer(ArraySegment<byte> buffer, out int read)
         {
-            UInt64 seed;
-            buffer = SerializationHelpers.ReadFromBuffer(buffer, out seed);
-            UInt64 gamma;
-            buffer = SerializationHelpers.ReadFromBuffer(buffer, out gamma);
+            buffer = SerializationHelpers.ReadFromBuffer(buffer, out var seed);
+            buffer = SerializationHelpers.ReadFromBuffer(buffer, out var gamma);
             read = BufferSize;
             return new SplittableRandom(seed, gamma);
         }
@@ -25,10 +23,8 @@ namespace NPrng.Serializers
         /// <inheritdoc/>
         public override SplittableRandom ReadFromStream(Stream source)
         {
-            UInt64 seed;
-            SerializationHelpers.ReadFromStream(source, out seed);
-            UInt64 gamma;
-            SerializationHelpers.ReadFromStream(source, out gamma);
+            SerializationHelpers.ReadFromStream(source, out var seed);
+            SerializationHelpers.ReadFromStream(source, out var gamma);
             return new SplittableRandom(seed, gamma);
         }
 

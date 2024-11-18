@@ -1,21 +1,20 @@
+using NPrng.Generators;
 using System;
 using System.IO;
-using NPrng.Generators;
 
 namespace NPrng.Serializers
 {
     public sealed class LinearCongruentGeneratorSerializer : AbstractPseudoRandomGeneratorSerializer<LinearCongruentGenerator>
     {
-        private const int BufferSize = sizeof(UInt64);
+        private const int BufferSize = sizeof(ulong);
 
         /// <inheritdoc/>
-        public override int GetExpectedBufferSize(LinearCongruentGenerator generator) => sizeof(UInt64);
+        public override int GetExpectedBufferSize(LinearCongruentGenerator generator) => sizeof(ulong);
 
         /// <inheritdoc/>
         public override LinearCongruentGenerator ReadFromBuffer(ArraySegment<byte> buffer, out int read)
         {
-            UInt64 state;
-            SerializationHelpers.ReadFromBuffer(buffer, out state);
+            SerializationHelpers.ReadFromBuffer(buffer, out var state);
             read = BufferSize;
             return new LinearCongruentGenerator(state);
         }
@@ -23,8 +22,7 @@ namespace NPrng.Serializers
         /// <inheritdoc/>
         public override LinearCongruentGenerator ReadFromStream(Stream source)
         {
-            UInt64 state;
-            SerializationHelpers.ReadFromStream(source, out state);
+            SerializationHelpers.ReadFromStream(source, out var state);
             return new LinearCongruentGenerator(state);
         }
 

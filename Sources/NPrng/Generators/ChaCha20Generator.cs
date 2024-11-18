@@ -8,10 +8,10 @@ namespace NPrng.Generators
         private const int Rounds = 20;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static UInt32 ROTL(UInt32 a, int b) => unchecked((a << b) | (a >> (32 - b)));
+        private static uint ROTL(uint a, int b) => unchecked((a << b) | (a >> (32 - b)));
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static void QR(ref UInt32 a, ref UInt32 b, ref UInt32 c, ref UInt32 d)
+        private static void QR(ref uint a, ref uint b, ref uint c, ref uint d)
         {
             unchecked
             {
@@ -31,13 +31,13 @@ namespace NPrng.Generators
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static void ChaChaBlock(UInt32[] input, out UInt32[] output)
+        private static void ChaChaBlock(uint[] input, out uint[] output)
         {
             const int blockSize = 16;
 
             unchecked
             {
-                var x = new UInt32[blockSize];
+                var x = new uint[blockSize];
                 Array.Copy(input, 0, x, 0, blockSize);
 
                 for (var i = 0; i < (Rounds/2); i++)
@@ -64,13 +64,13 @@ namespace NPrng.Generators
             }
         }
 
-        internal UInt32[] Key { get; private set; }
-        private UInt32[] Cache;
+        internal uint[] Key { get; private set; }
+        private uint[] Cache;
 
-        internal ChaCha20Generator(UInt32[] key)
+        internal ChaCha20Generator(uint[] key)
         {
             Key = key;
-            Cache = Array.Empty<UInt32>();
+            Cache = Array.Empty<uint>();
             
             // Key[12] serves two purposes: as a ChaCha block counter
             // and as a pointer to Cache.
@@ -83,13 +83,13 @@ namespace NPrng.Generators
             }
         }
 
-        public ChaCha20Generator(UInt64 seed)
+        public ChaCha20Generator(ulong seed)
         {
             Key = GenerateInitialKey(seed);
-            Cache = Array.Empty<UInt32>();
+            Cache = Array.Empty<uint>();
         }
 
-        private static UInt32[] GenerateInitialKey(UInt64 seed)
+        private static uint[] GenerateInitialKey(ulong seed)
         {
             unchecked
             {
@@ -97,7 +97,7 @@ namespace NPrng.Generators
                 {
                     seed = 0x2654633dc37cc394;
                 }
-                var key = new UInt32[16];
+                var key = new uint[16];
 
                 // Fill constants
                 key[0] = 0x61707865;
@@ -108,20 +108,20 @@ namespace NPrng.Generators
                 // Fill key
                 for (var i = 0; i < 4; i++)
                 {
-                    key[4+2*i] = (UInt32)(seed & 0xffffffff);
-                    key[5+2*i] = (UInt32)((seed >> 32) & 0xffffffff);
+                    key[4+2*i] = (uint)(seed & 0xffffffff);
+                    key[5+2*i] = (uint)((seed >> 32) & 0xffffffff);
                 }
 
                 // Initialize block/cache counter to 0
                 key[12] = 0;
 
                 // Fill nonce
-                FillNonce(new ArraySegment<UInt32>(key, 13, 3), seed);
+                FillNonce(new ArraySegment<uint>(key, 13, 3), seed);
                 return key;
             }
         }
 
-        private static void FillNonce(ArraySegment<uint> arraySegment, UInt64 seed)
+        private static void FillNonce(ArraySegment<uint> arraySegment, ulong seed)
         {
             unchecked
             {
@@ -130,13 +130,13 @@ namespace NPrng.Generators
                 var count = arraySegment.Offset + arraySegment.Count;
                 for (var i = arraySegment.Offset; i < count; i++)
                 {
-                    array[i] = (UInt32)rng.Generate();
+                    array[i] = (uint)rng.Generate();
                 }
             }
         }
 
         /// <inheritdoc/>
-        public override Int64 Generate()
+        public override long Generate()
         {
             unchecked
             {
@@ -151,13 +151,13 @@ namespace NPrng.Generators
 
                 var first = Cache[2*mod];
                 var second = Cache[2*mod + 1];
-                var result = ((UInt64)first << 32) + (UInt64)second;
+                var result = ((ulong)first << 32) + second;
                 if (Key[12] >= (1 << 16) + 7)
                 {
                     Key = GenerateInitialKey(result);
-                    Cache = Array.Empty<UInt32>();
+                    Cache = Array.Empty<uint>();
                 }
-                return (Int64)result;
+                return (long)result;
             }
         }
     }
