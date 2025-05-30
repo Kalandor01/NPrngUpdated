@@ -16,7 +16,7 @@ namespace NPrng
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ArraySegment<byte> WriteToBuffer(ulong value, ArraySegment<byte> buffer)
         {
-            var array = buffer.Array;
+            var array = buffer.Array!;
             var offset = buffer.Offset;
 
             for (var i = sizeof(long) - 1; i >= 0; i--)
@@ -31,7 +31,7 @@ namespace NPrng
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void WriteToStream(ulong value, Stream stream)
         {
-            var buffer = WriteBuffer.Value;
+            var buffer = WriteBuffer.Value!;
             WriteToBuffer(value, new ArraySegment<byte>(buffer));
             stream.Write(buffer, 0, sizeof(ulong));
         }
@@ -39,7 +39,7 @@ namespace NPrng
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ArraySegment<byte> ReadFromBuffer(ArraySegment<byte> buffer, out ulong value)
         {
-            var array = buffer.Array;
+            var array = buffer.Array!;
             var offset = buffer.Offset;
 
             value = 0;
@@ -55,7 +55,7 @@ namespace NPrng
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void ReadFromStream(Stream stream, out ulong value)
         {
-            var buffer = ReadBuffer.Value;
+            var buffer = ReadBuffer.Value!;
             var missing = sizeof(ulong);
             var offset = 0;
             while (missing > 0)

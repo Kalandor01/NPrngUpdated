@@ -126,7 +126,7 @@ namespace NPrng.Generators
             unchecked
             {
                 var rng = new LinearCongruentGenerator(seed);
-                var array = arraySegment.Array;
+                var array = arraySegment.Array!;
                 var count = arraySegment.Offset + arraySegment.Count;
                 for (var i = arraySegment.Offset; i < count; i++)
                 {

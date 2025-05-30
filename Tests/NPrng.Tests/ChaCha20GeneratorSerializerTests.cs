@@ -1,7 +1,7 @@
-using System;
-using System.IO;
 using NPrng.Generators;
 using NPrng.Serializers;
+using System;
+using System.IO;
 using Xunit;
 
 namespace NPrng.Tests
