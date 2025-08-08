@@ -2,11 +2,11 @@
 
   <PropertyGroup>
     <OutputType>Library</OutputType>
-    <Version>1.0.0.4</Version>
+    <Version>1.0.0.5</Version>
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <LangVersion>9.0</LangVersion>
+    <LangVersion>13</LangVersion>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Authors>Rafał Szefler</Authors>
     <Description>The project contains several implementations of popular pseudo random number generator algorithms. Additionally it contains serializers to save and restore state of every generator in the library.
